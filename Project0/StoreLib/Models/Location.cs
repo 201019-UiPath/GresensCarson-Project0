@@ -36,7 +36,7 @@ namespace StoreLib.Models
     }
     public void AddEmployee(Employee e)
     {
-      inventory.Add(e);
+      employees.Add(e);
     }
 
     public void RemoveFromInventory(Product p)
@@ -45,7 +45,7 @@ namespace StoreLib.Models
     }
     public void RemoveEmployee(Employee e)
     {
-      inventory.Remove(e);
+      employees.Remove(e);
     }
 
 

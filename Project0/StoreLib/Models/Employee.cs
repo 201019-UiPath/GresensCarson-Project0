@@ -12,7 +12,7 @@ namespace StoreLib.Models
     {
       Id = 1;
       Name = "Jim";
-      Location = new Location();
+      Loc = new Location();
       Salary = 30000;
     }
 

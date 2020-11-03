@@ -16,6 +16,13 @@ namespace StoreLib.Models
       Salary = 30000;
     }
 
+    public Employee(string n, int i)
+    {
+      Id = i;
+      Name = n;
+      Loc = new Location();
+      Salary = 40000;
+    }
     public Employee(string n, int i, Location l, int sal)
     {
       Id = i;

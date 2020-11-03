@@ -7,11 +7,11 @@ namespace StoreLib.Models
     private List<Product> items;
     private int id;
     private double price;
-    private string priceStr;
+    private string date;
 
     public int Id { get; set; }
     public double Price { get; set; }
-    public string PriceStr { get; set; }
+    public string Date { get; set; }
     public List<Product> Items { get; set; }
 
     public Order(List<Product> pList)

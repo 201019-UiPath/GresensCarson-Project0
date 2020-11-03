@@ -2,8 +2,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreLib.Models;
+using System.Data;
 
 namespace StoreDB
 {
@@ -24,34 +24,35 @@ namespace StoreDB
         .AddJsonFile("appsettings.json")
         .Build();
 
-        var connectionString = configuration.GetConnectionString("StoreDB");
+        //var connectionString = configuration.GetConnectionString("StoreDB");
+        string connectionString = @"Host=lallah.db.elephantsql.com;Port=5432;Database=efzgkaao;Username=efzgkaao;Password=wbQfq_L5qqsRTF3VIFhrcjsJfAg2KTuy";
         optionsBuilder.UseNpgsql(connectionString);
       }
     }
 
-    // protected override void OnModelCreating(ModelBuilder modelBuilder) {
+    /* protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
-    //     modelBuilder.Entity<Order>()
-    //     .HasOne(e => e.PriceStr)
-    //     .WithMany("Items")
-    //     .HasForeignKey(e => e.Id);
+         modelBuilder.Entity<Order>()
+         .HasOne(e => e.PriceStr)
+         .WithMany("Items")
+         .HasForeignKey(e => e.Id);
 
-    //     modelBuilder.Entity<Customer>()
-    //     .HasOne(e => e.Name)
-    //     .WithMany("Items")
-    //     .HasForeignKey(e => e.Id);
+         modelBuilder.Entity<Customer>()
+         .HasOne(e => e.Name)
+         .WithMany("Items")
+         .HasForeignKey(e => e.Id);
 
-    //     modelBuilder.Entity<Product>()
-    //     .HasOne(e => e.Name)
-    //     .WithOne("Items")
-    //     .HasForeignKey("Id");
+         modelBuilder.Entity<Product>()
+         .HasOne(e => e.Name)
+         .WithOne("Items")
+         .HasForeignKey("Id");
 
-    //     modelBuilder.Entity<Employee>()
-    //     .HasOne(e => e.Name)
-    //     .WithOne("Id1")
-    //     .HasForeignKey("ID");
+         modelBuilder.Entity<Employee>()
+         .HasOne(e => e.Name)
+         .WithOne("Id1")
+         .HasForeignKey("ID");
 
-    // }
+     }*/
 
   }
 }

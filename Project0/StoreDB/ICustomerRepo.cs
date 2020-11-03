@@ -10,8 +10,7 @@ namespace StoreDB
     void AddCustomer(Customer c);
     void RemoveCustomer(Customer c);
     void UpdateCustomer(Customer c); //ie. update their order history
-    Customer GetCustomer(string name, int id);
-    Customer GetCustomer(int id, string name);
+    Customer GetCustomerById(int id);
     List<Customer> GetAllCustomers();
 
   }

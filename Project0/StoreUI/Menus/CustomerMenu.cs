@@ -35,7 +35,7 @@ namespace StoreUI.Menus
       // Next Step: 
 
       Console.WriteLine($"Hello {c.Name}! Here are Today's Products: ");
-      Console.Write("Milk \nCheese \nIce Cream");
+      Console.Write("Milk \nCheese \nIce Cream\n");
 
       Console.WriteLine("Would you like to place an order? \n[0] Yes \n[1] No");
       proceed = Console.ReadLine();

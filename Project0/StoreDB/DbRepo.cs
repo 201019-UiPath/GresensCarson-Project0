@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using StoreLib.Models;
+using StoreDB.Models;
 using System.Linq;
 using System;
 
@@ -50,6 +50,11 @@ namespace StoreDB
     public List<Employee> GetAllEmployees()
     {
       return context.Employees.ToList();
+    }
+
+    public List<Location> GetAllLocations()
+    {
+      return context.Locations.ToList();
     }
 
     public List<Order> GetAllOrders()
@@ -143,6 +148,12 @@ namespace StoreDB
     public void RemoveLocation(Location loc)
     {
       context.Locations.Remove(loc);
+      context.SaveChanges();
+    }
+
+    public void RemoveOrder(Order o)
+    {
+      context.Orders.Remove(o);
       context.SaveChanges();
     }
 

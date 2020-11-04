@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace StoreLib.Models
+namespace StoreDB.Models
 {
   public class Location
   {

@@ -1,5 +1,5 @@
 using System;
-namespace StoreLib
+namespace StoreDB
 {
   public class OutOfStockException : Exception
   {

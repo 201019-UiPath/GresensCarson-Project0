@@ -1,14 +1,16 @@
-using StoreLib.Models;
+using StoreDB.Models;
 using System.Collections.Generic;
+using StoreDB;
 
-namespace StoreLib
+namespace StoreDB
 {
   public class CustomerTasks
   {
-    public void PlaceOrder(Order o)
+    private ICustomerRepo repo;
+    public CustomerTasks() { }
+    public CustomerTasks(ICustomerRepo r)
     {
-      //allows the customer to make an order
-      // log that order occurred and persist order to db
+      repo = r;
     }
 
     public List<Order> GetOrderHistory(Customer c)

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StoreLib.Models
+namespace StoreDB.Models
 {
   public class Order
   {
@@ -24,6 +24,11 @@ namespace StoreLib.Models
     {
       items = pList;
       Id = i;
+    }
+
+    public Order()
+    {
+
     }
 
 

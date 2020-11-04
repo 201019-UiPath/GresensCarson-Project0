@@ -1,7 +1,7 @@
 using System;
 using Xunit;
-using StoreLib;
-using StoreLib.Models;
+using StoreDB;
+using StoreDB.Models;
 using System.Collections.Generic;
 
 namespace StoreTest

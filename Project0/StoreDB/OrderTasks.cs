@@ -1,10 +1,30 @@
-using StoreLib.Models;
+using StoreDB.Models;
 using System.Collections.Generic;
 
-namespace StoreLib
+namespace StoreDB
 {
   public class OrderTasks
   {
+    private IOrderRepo repo;
+
+    public OrderTasks(IOrderRepo r)
+    {
+      repo = r;
+    }
+
+    public OrderTasks() { }
+
+    public void AddOrder(Order o)
+    {
+      //allows the customer to make an order -> send it to db
+      repo.AddOrder(o);
+    }
+
+    public void UpdateOrder(Order o)
+    {
+      repo.UpdateOrder(o);
+    }
+
     public void AddProduct(Order o, Product p)
     {
       //add product to items list
@@ -31,23 +51,30 @@ namespace StoreLib
     {
       //remove all products from product list & set id/price to defaults
       o.CancelOrder();
+      repo.RemoveOrder(o);
     }
 
-    public void RecordOrderLoc(Order o, Location loc)
+    public Order GetOrderById(int id)
     {
-      //record order made at this location
+      return repo.GetOrderById(id);
     }
 
-    public void RecordOrderGlobal(Order o)
+    public Order GetOrderByPrice(double p)
     {
-      //record order
+      return repo.GetOrderByPrice(p);
     }
+
+
+    public List<Order> GetOrderByDate(bool asc)
+    {
+      return repo.GetOrderByDate(asc);
+    }
+
 
     public double OrderPrice(Order o)
     {
       //sum up all product prices in order list
       return o.OrderPrice();
-
     }
   }
 }

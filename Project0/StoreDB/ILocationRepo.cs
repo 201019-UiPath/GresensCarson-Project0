@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using StoreLib.Models;
+using StoreDB.Models;
 using StoreLib;
 
 namespace StoreDB
@@ -12,6 +12,8 @@ namespace StoreDB
     void UpdateLocation(Location loc); //say stuff gets restocked, inventory changes, etc.
     Location GetLocationByAddress(string address);
     Location GetLocationById(int id);
+    List<Location> GetAllLocations();
+
     List<Product> GetInventory(Location loc);
 
   }

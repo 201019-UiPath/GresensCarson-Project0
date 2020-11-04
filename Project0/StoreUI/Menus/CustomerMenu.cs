@@ -1,7 +1,7 @@
 using System;
-using StoreLib;
+using StoreDB;
 using System.Text.RegularExpressions;
-using StoreLib.Models;
+using StoreDB.Models;
 using System.Collections.Generic;
 
 namespace StoreUI.Menus
@@ -49,16 +49,44 @@ namespace StoreUI.Menus
 
       Console.WriteLine("Time to place an order!");
       Order newOrder = MakeOrder();
+      Order emptyOrder = new Order();
+      StoreContext context = new StoreContext();
+      DbRepo repo = new DbRepo(context);
+      OrderTasks ot = new OrderTasks(repo);
+      CustomerTasks ct = new CustomerTasks(repo);
+      EmployeeTasks et = new EmployeeTasks(repo);
+      LocationTasks lt = new LocationTasks(repo);
+      ProductTasks pt = new ProductTasks(repo);
+
+      if (newOrder.Equals(emptyOrder))
+      {
+        Console.WriteLine("GoodBye");
+        return;
+      }
+
+
+
+
 
     }
 
     public Order MakeOrder()
     {
-      int numMilk = askForProduct("milk", "gallons");
-      int numCheese = askForProduct("cheese", "wheels");
-      int numIceCream = askForProduct("ice cream", "cartons");
+      string doubleCheck;
+      int numMilk;
+      int numCheese;
+      int numIceCream;
       List<Product> orderItems = new List<Product>();
       OrderTasks ot = new OrderTasks();
+      do
+      {
+        numMilk = askForProduct("milk", "gallons");
+        numCheese = askForProduct("cheese", "wheels");
+        numIceCream = askForProduct("ice cream", "cartons");
+        Console.WriteLine("Are you sure? \n[0] Yes, Place my order! \n[1] No, I made a mistake. Let me order again");
+        Console.WriteLine("[3] No, I don't want to make an order anymore");
+        doubleCheck = Console.ReadLine();
+      } while (ValidInput(doubleCheck, "1"));
 
       for (int i = 0; i < numMilk; i++)
       {
@@ -72,10 +100,9 @@ namespace StoreUI.Menus
       for (int i = 0; i < numIceCream; i++)
       {
         orderItems.Add(new IceCream());
-
       }
-
-      return new Order(orderItems);
+      if (ValidInput(doubleCheck, "0")) { return new Order(orderItems); }
+      else { return new Order(); }
 
     }
 

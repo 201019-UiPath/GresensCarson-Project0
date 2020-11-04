@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using StoreLib.Models;
+using StoreDB.Models;
 using StoreLib;
 
 namespace StoreDB
@@ -9,7 +9,7 @@ namespace StoreDB
   {
     void AddOrder(Order o);
     void UpdateOrder(Order o);
-    // void CancelOrder(Order o); //No cancel order since UI asks for certainty before adding it to db 
+    void RemoveOrder(Order o);
     Order GetOrderById(int id);
     Order GetOrderByPrice(double price);
     List<Order> GetOrderByDate(bool asc);

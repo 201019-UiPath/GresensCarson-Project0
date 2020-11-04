@@ -1,4 +1,4 @@
-namespace StoreLib.Models
+namespace StoreDB.Models
 {
   public class Milk : Product
   {

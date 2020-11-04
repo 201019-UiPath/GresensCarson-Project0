@@ -7,7 +7,7 @@ namespace StoreDB.Models
   {
     private List<Order> orderHistory;
     public List<Order> OrderHistory { get; set; }
-    public void addOrderToHistory(Order o)
+    public void AddOrderToHistory(Order o)
     {
       orderHistory.Add(o);
     }
@@ -16,12 +16,15 @@ namespace StoreDB.Models
     {
       Id = 0;
       Name = "Bob";
+      orderHistory = new List<Order>();
     }
 
     public Customer(string n, int i)
     {
       Id = i;
       Name = n;
+      orderHistory = new List<Order>();
+
     }
   }
 }

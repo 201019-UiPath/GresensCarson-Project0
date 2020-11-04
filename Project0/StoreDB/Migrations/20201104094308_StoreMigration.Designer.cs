@@ -10,7 +10,7 @@ using StoreDB;
 namespace StoreDB.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20201103233420_StoreMigration")]
+    [Migration("20201104094308_StoreMigration")]
     partial class StoreMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,9 @@ namespace StoreDB.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Date")
                         .HasColumnType("text");
 
@@ -88,6 +91,8 @@ namespace StoreDB.Migrations
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -128,6 +133,15 @@ namespace StoreDB.Migrations
                     b.HasOne("StoreDB.Models.Location", "Loc")
                         .WithMany("Employees")
                         .HasForeignKey("LocId");
+                });
+
+            modelBuilder.Entity("StoreDB.Models.Order", b =>
+                {
+                    b.HasOne("StoreDB.Models.Customer", null)
+                        .WithMany("OrderHistory")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StoreDB.Models.Product", b =>

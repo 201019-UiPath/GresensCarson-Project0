@@ -18,6 +18,7 @@ namespace StoreUI.Menus
       do
       {
         c = LogIn();
+        proceed = "4";
         if (c.Id == -1)
         {
           Console.WriteLine("Quitting now.");
@@ -58,6 +59,20 @@ namespace StoreUI.Menus
       EmployeeTasks et = new EmployeeTasks(repo);
       LocationTasks lt = new LocationTasks(repo);
       ProductTasks pt = new ProductTasks(repo);
+      List<Order> previousOH = new List<Order>();
+      if (c.Equals(repo.GetCustomerById(c.Id)))
+      {
+        previousOH = repo.GetCustomerById(c.Id).OrderHistory;
+        repo.AddCustomer(c);
+      }
+      else
+      {
+        previousOH = repo.GetCustomerById(c.Id).OrderHistory;
+        repo.RemoveCustomer((repo.GetCustomerById(c.Id)));
+        repo.AddCustomer(c);
+      }
+
+      previousOH = c.OrderHistory;
 
       if (ValidInput(proceed, "0"))
       {
@@ -84,7 +99,8 @@ namespace StoreUI.Menus
         while (!ValidInput(confirm, "0|1"));
         if (ValidInput(confirm, "0"))
         {
-          ot.AddOrder(newOrder);
+          c.AddOrderToHistory(newOrder);
+          repo.UpdateCustomer(c);
           Console.WriteLine("Your order has been processed!");
         }
         if (ValidInput(confirm, "1"))
@@ -107,7 +123,7 @@ namespace StoreUI.Menus
 
       if (ValidInput(next, "0"))
       {
-        ShowOrderHistory(c, repo);
+        ShowOrderHistory(c, repo, previousOH);
       }
       if (ValidInput(next, "1"))
       {
@@ -119,31 +135,32 @@ namespace StoreUI.Menus
         return;
       }
 
-
-
     }
 
-    public void ShowOrderHistory(Customer c, DbRepo repo)
+    public void ShowOrderHistory(Customer c, DbRepo repo, List<Order> prev)
     {
       CustomerTasks ct = new CustomerTasks(repo);
 
       string sortBy;
-      List<Order> orderHistory;
+      List<Order> orderHistory = prev;
       do
       {
         Console.WriteLine("Would you your order history sorted by [0] oldest or [1] newest?");
         sortBy = Console.ReadLine();
       } while (!ValidInput(sortBy, "0|1"));
 
-      if (ValidInput(sortBy, "0"))
-      { orderHistory = ct.GetOrderHistoryByDate(c, true); }
-      else { orderHistory = ct.GetOrderHistoryByDate(c, false); }
+      if (orderHistory.Equals(null)) { orderHistory = prev; }
 
+      if (!ValidInput(sortBy, "0")) { orderHistory.Reverse(); }
+
+
+      Console.WriteLine(orderHistory);
       int i = 0;
-      foreach (Order ord in orderHistory)
+      foreach (var ord in orderHistory)
       {
         i++;
-        Console.WriteLine($"Order {1} cost ${ord.Price} and contained the following:");
+        Console.WriteLine("Goes into loop");
+        Console.WriteLine($"Order {i} cost ${ord.OrderPrice()} and contained the following:");
         foreach (Product p in ord.Items)
         {
           Console.WriteLine($"     {p.Name}");

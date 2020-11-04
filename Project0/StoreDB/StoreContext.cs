@@ -29,31 +29,31 @@ namespace StoreDB
         optionsBuilder.UseNpgsql(connectionString);
       }
     }
-    /*
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
 
-          modelBuilder.Entity<Order>()
-          .HasOne(e => e.Date)
-          .WithOne(o => o.Price)
-          .HasForeignKey(e => e.Id);
+    /* protected override void OnModelCreating(ModelBuilder modelBuilder)
+     {
 
-          modelBuilder.Entity<Customer>()
-          .HasOne(e => e.Name)
-          .WithMany(Items)
-          .HasForeignKey(e => e.Id);
+       modelBuilder.Entity<Order>()
+       .HasOne(ord => ord.)
+       .WithMany(o => o.Items)
+       .HasForeignKey(e => e.Id);
 
-          modelBuilder.Entity<Product>()
-          .HasOne(e => e.Name)
-          .WithOne("Items")
-          .HasForeignKey("Id");
+       modelBuilder.Entity<Customer>()
+       .HasOne(e => e.Name)
+       .WithMany(cus => cus.)
+       .HasForeignKey(e => e.Id);
 
-          modelBuilder.Entity<Employee>()
-          .HasOne(e => e.Name)
-          .WithOne("Id1")
-          .HasForeignKey("ID");
+       modelBuilder.Entity<Product>()
+       .HasOne(e => e.Name)
+       .WithOne("Items")
+       .HasForeignKey("Id");
 
-        }*/
+       modelBuilder.Entity<Employee>()
+       .HasOne(e => e.Name)
+       .WithOne("Id1")
+       .HasForeignKey("ID");
+
+     }*/
 
   }
 }

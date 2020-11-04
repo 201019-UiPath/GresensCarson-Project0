@@ -108,7 +108,6 @@ namespace StoreUI.Menus
           Console.WriteLine("Your order has been cancelled. GoodBye.");
         }
       }
-      Console.Clear();
       //next step: 
       Console.WriteLine("What would you like to do now?");
       Console.WriteLine("[0] Check Order History \n[1]Check location inventory \n[3]Check product stock");
@@ -267,7 +266,6 @@ namespace StoreUI.Menus
 
       if (!ValidInput(newCus, "0|1")) { return new Customer("", -1); } //exit if customer wants to quit
 
-      Console.Clear();
       Console.Write("Please enter your Name: ");
       string cusName = Console.ReadLine();
       Console.Write("Please enter your numeric Id: ");

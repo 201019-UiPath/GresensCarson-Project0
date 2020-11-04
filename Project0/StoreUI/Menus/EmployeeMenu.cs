@@ -56,7 +56,7 @@ namespace StoreUI.Menus
 
       if (ValidInput(job, "1"))
       {
-        RestockUi(repo);
+        RestockUi(repo, new Milk());
       }
 
     }
@@ -65,11 +65,11 @@ namespace StoreUI.Menus
     {
       //ask user for employee details or quit
       Console.WriteLine("Welcome Employee! Would you like to:");
-      Console.WriteLine("[0] Log in");
+      Console.WriteLine("[0] Log in \n[1]New Employee");
       Console.WriteLine("[Any other key] Quit");
       string newEmp = Console.ReadLine();
 
-      if (!ValidInput(newEmp, "0")) { return new Employee("", -1); } //exit if employee wants to quit
+      if (!ValidInput(newEmp, "0|1")) { return new Employee("", -1); } //exit if employee wants to quit
 
       Console.Clear();
       Console.Write("Please enter your Name: ");
@@ -87,11 +87,11 @@ namespace StoreUI.Menus
       StoreContext context = new StoreContext();
       DbRepo repo = new DbRepo(context);
       Employee employeeIdCheck = repo.GetEmployeeById(Convert.ToInt32(empId));
-      if (employeeIdCheck == null)
+      if (employeeIdCheck != null && ValidInput(newEmp, "1"))
       {
         return new Employee("", -2);
       }
-      if (employeeIdCheck != null)
+      if (employeeIdCheck != null && ValidInput(newEmp, "0"))
       {
         return employeeIdCheck;
       }
@@ -100,12 +100,15 @@ namespace StoreUI.Menus
 
     }
 
-    public void RestockUi(DbRepo repo)
+    public void RestockUi(DbRepo repo, Product p)
     {
       // ask for product and restock
       ProductTasks pt = new ProductTasks(repo);
       EmployeeTasks et = new EmployeeTasks(repo);
       Product realProduct = new Product();
+      if (pt.GetProductById(p.Id).Equals(p.Id)) { }
+      else { pt.AddProduct(p); }
+
       string id;
       string proceed = "0";
       do

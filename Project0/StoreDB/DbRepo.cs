@@ -69,37 +69,37 @@ namespace StoreDB
 
     public Customer GetCustomerById(int id)
     {
-      return context.Customers.Single(c => c.Id == id);
+      return context.Customers.SingleOrDefault(c => c.Id == id);
     }
 
     public Employee GetEmployeeById(int id)
     {
-      return context.Employees.Single(e => e.Id == id);
+      return context.Employees.SingleOrDefault(e => e.Id == id);
     }
 
     public Employee GetEmployeeByLocation(Location loca)
     {
-      return context.Employees.Single(e => e.Loc == loca);
+      return context.Employees.SingleOrDefault(e => e.Loc == loca);
     }
 
     public Employee GetEmployeeBySalary(int sal)
     {
-      return context.Employees.Single(e => e.Salary == sal);
+      return context.Employees.SingleOrDefault(e => e.Salary == sal);
     }
 
     public List<Product> GetInventory(Location loc)
     {
-      return context.Locations.Single(l => l == loc).Inventory;
+      return context.Locations.SingleOrDefault(l => l == loc).Inventory;
     }
 
     public Location GetLocationByAddress(string address)
     {
-      return context.Locations.Single(l => l.Address == address);
+      return context.Locations.SingleOrDefault(l => l.Address == address);
     }
 
     public Location GetLocationById(int id)
     {
-      return context.Locations.Single(l => l.Id == id);
+      return context.Locations.SingleOrDefault(l => l.Id == id);
     }
 
     public List<Order> GetOrderByDate(bool asc)
@@ -116,22 +116,39 @@ namespace StoreDB
 
     public Order GetOrderById(int id)
     {
-      return context.Orders.Single(o => o.Id == id);
+      return context.Orders.SingleOrDefault(o => o.Id == id);
     }
 
     public Order GetOrderByPrice(double price)
     {
-      return context.Orders.Single(o => o.Price == price);
+      return context.Orders.SingleOrDefault(o => o.Price == price);
+    }
+
+    public List<Order> GetOrdersByCustomerId(Customer cus)
+    {
+      return context.Orders.Where(o => o.Id == cus.Id).ToList();
+    }
+
+    public List<Order> GetOrdersByDateCustomer(Customer cus, bool asc)
+    {
+      if (asc)
+      {
+        return context.Orders.Where(o => o.Id == cus.Id).OrderBy(o => o.Date).ToList();
+      }
+      else
+      {
+        return context.Orders.Where(o => o.Id == cus.Id).OrderByDescending(o => o.Date).ToList();
+      }
     }
 
     public Product GetProductById(int id)
     {
-      return context.Products.Single(p => p.Id == id);
+      return context.Products.SingleOrDefault(p => p.Id == id);
     }
 
     public Product GetProductByName(string name)
     {
-      return context.Products.Single(p => p.Name == name);
+      return context.Products.SingleOrDefault(p => p.Name == name);
     }
     public void RemoveCustomer(Customer c)
     {

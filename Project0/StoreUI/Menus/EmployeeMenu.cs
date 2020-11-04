@@ -2,6 +2,7 @@ using StoreDB;
 using StoreDB.Models;
 using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace StoreUI.Menus
 {
@@ -33,6 +34,9 @@ namespace StoreUI.Menus
 
       // Next Step:
 
+      StoreContext context = new StoreContext();
+      DbRepo repo = new DbRepo(context);
+
       Console.WriteLine($"Welcome {em.Name}, what would you like to do?");
       Console.WriteLine("[0] Check item inventory");
       Console.WriteLine("[1] Restock an item");
@@ -47,12 +51,12 @@ namespace StoreUI.Menus
 
       if (ValidInput(job, "0"))
       {
-        InventoryUi();
+        InventoryUi(repo);
       }
 
       if (ValidInput(job, "1"))
       {
-        RestockUi();
+        RestockUi(repo);
       }
 
     }
@@ -80,25 +84,88 @@ namespace StoreUI.Menus
         empId = Console.ReadLine();
       }
       Employee emp = new Employee(empName, Convert.ToInt32(empId));
-      // if( ! emp in db ){
-      //           return employee with id -2 with method
-      // }
-      // if (emp in db){
-      //  return emp with associated info
-      // }
+      StoreContext context = new StoreContext();
+      DbRepo repo = new DbRepo(context);
+      Employee employeeIdCheck = repo.GetEmployeeById(Convert.ToInt32(empId));
+      if (employeeIdCheck == null)
+      {
+        return new Employee("", -2);
+      }
+      if (employeeIdCheck != null)
+      {
+        return employeeIdCheck;
+      }
 
       return emp;
 
     }
 
-    public void RestockUi()
+    public void RestockUi(DbRepo repo)
     {
       // ask for product and restock
+      ProductTasks pt = new ProductTasks(repo);
+      EmployeeTasks et = new EmployeeTasks(repo);
+      Product realProduct = new Product();
+      string id;
+      string proceed = "0";
+      do
+      {
+
+        Console.WriteLine("Please enter a valid Product id");
+        id = Console.ReadLine();
+        while (ValidInput(id, "\\D"))
+        {
+          Console.WriteLine("Sorry, please enter a whole number!");
+          id = Console.ReadLine();
+        }
+
+        realProduct = repo.GetProductById(Convert.ToInt32(id));
+
+        if (realProduct == null)
+        {
+          Console.WriteLine("Sorry, That id number was not valid!");
+          Console.WriteLine("Please select an option: \n[0] try again \n[any other key] quit");
+        }
+      } while (ValidInput(proceed, "0"));
+
+      et.RestockProductGlobal(realProduct);
+
     }
 
-    public void InventoryUi()
+    public void InventoryUi(DbRepo repo)
     {
       // retrieve info from database and print to console
+
+      LocationTasks lt = new LocationTasks(repo);
+
+      string address;
+      string proceed;
+      List<Product> inventory;
+      List<Location> locations = lt.GetAllLocations();
+      Location validAddress;
+      do
+      {
+        Console.WriteLine("Please enter a valid location address:");
+        address = Console.ReadLine();
+        validAddress = lt.GetLocationByAddress(address);
+        if (locations.Contains(validAddress)) { proceed = "0"; }
+        else
+        {
+          Console.WriteLine("Sorry, please enter either a valid location address or [1] to quit");
+          proceed = Console.ReadLine();
+        }
+      } while (!ValidInput(proceed, "0|1"));
+
+      if (ValidInput(proceed, "1"))
+      { return; }
+
+      inventory = validAddress.Inventory;
+      Console.WriteLine($"Our Location at {validAddress.Address} has the following inventory:");
+
+      foreach (Product p in inventory)
+      {
+        Console.WriteLine($"{p.Name} with {p.Stock} in stock");
+      }
     }
 
     public bool ValidInput(string input, string regex)

@@ -12,6 +12,7 @@ namespace StoreDB
     void UpdateCustomer(Customer c); //ie. update their order history
     Customer GetCustomerById(int id);
     List<Customer> GetAllCustomers();
+    List<Order> GetOrdersByDateCustomer(Customer cus, bool asc);
 
   }
 }

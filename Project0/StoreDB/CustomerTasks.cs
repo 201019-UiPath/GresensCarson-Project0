@@ -6,38 +6,28 @@ namespace StoreDB
 {
   public class CustomerTasks
   {
-    private ICustomerRepo repo;
+    private DbRepo repo;
     public CustomerTasks() { }
-    public CustomerTasks(ICustomerRepo r)
+    public CustomerTasks(DbRepo r)
     {
       repo = r;
     }
 
     public List<Order> GetOrderHistory(Customer c)
     {
-      //get the customer's order history
-      List<Order> lst = new List<Order>();
-      return lst;
-    }
-
-    public List<Order> GetOrderHistoryByPrice(Customer c, bool asc)
-    {
       // call GetOrderHistory then sort by cost
-      List<Order> lst = new List<Order>();
-      return lst;
+      return repo.GetOrdersByCustomerId(c);
     }
 
-    public List<Order> GetOrderHistoryByAge(Customer c, bool asc)
+    public List<Order> GetOrderHistoryByDate(Customer c, bool asc)
     {
       // call GetOrderHistory then sort by age
-      List<Order> lst = new List<Order>();
-      return lst;
+      return repo.GetOrdersByDateCustomer(c, asc);
     }
 
     public List<Product> GetLocationInventory(Location loc)
     {
       //get inventory of a location
-      //maybe void?
       List<Product> lst = new List<Product>();
       return lst;
     }

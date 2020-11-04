@@ -32,7 +32,13 @@ namespace StoreUI.Menus
         }
       } while (ValidInput(proceed, "0"));
 
-      // Next Step: 
+      if (ValidInput(proceed, "1"))
+      {
+        Console.WriteLine("Quitting now.");
+        return;
+      }
+
+      // Next Step: let customer make order and persist to db
 
       Console.WriteLine($"Hello {c.Name}! Here are Today's Products: ");
       Console.Write("Milk \nCheese \nIce Cream\n");
@@ -45,11 +51,6 @@ namespace StoreUI.Menus
         proceed = Console.ReadLine();
       }
 
-      if (ValidInput(proceed, "1")) { return; }
-
-      Console.WriteLine("Time to place an order!");
-      Order newOrder = MakeOrder();
-      Order emptyOrder = new Order();
       StoreContext context = new StoreContext();
       DbRepo repo = new DbRepo(context);
       OrderTasks ot = new OrderTasks(repo);
@@ -58,17 +59,134 @@ namespace StoreUI.Menus
       LocationTasks lt = new LocationTasks(repo);
       ProductTasks pt = new ProductTasks(repo);
 
-      if (newOrder.Equals(emptyOrder))
+      if (ValidInput(proceed, "0"))
       {
-        Console.WriteLine("GoodBye");
+
+        Console.WriteLine("Time to place an order!");
+        Order newOrder = MakeOrder();
+        newOrder.Id = c.Id;
+        Order emptyOrder = new Order();
+
+        if (newOrder.Equals(emptyOrder))
+        {
+          Console.WriteLine("GoodBye");
+          return;
+        }
+
+        string confirm;
+        double price = newOrder.OrderPrice();
+        Console.WriteLine($"That will be ${price}");
+        do
+        {
+          Console.WriteLine("Please Select [0] to pay now or [1] to cancel your order");
+          confirm = Console.ReadLine();
+        }
+        while (!ValidInput(confirm, "0|1"));
+        if (ValidInput(confirm, "0"))
+        {
+          ot.AddOrder(newOrder);
+          Console.WriteLine("Your order has been processed!");
+        }
+        if (ValidInput(confirm, "1"))
+        {
+          Console.WriteLine("Your order has been cancelled. GoodBye.");
+        }
+      }
+      Console.Clear();
+      //next step: 
+      Console.WriteLine("What would you like to do now?");
+      Console.WriteLine("[0] Check Order History \n[1]Check location inventory \n[3]Check product stock");
+      Console.WriteLine("[4] Quit");
+      string next = Console.ReadLine();
+      while (!ValidInput(next, "0|1|2|3"))
+      {
+        Console.WriteLine("Please select a valid option to continue");
+        Console.WriteLine("[0] Check Order History \n[1]Check location inventory");
+        Console.WriteLine("[2] Quit");
+      }
+
+      if (ValidInput(next, "0"))
+      {
+        ShowOrderHistory(c, repo);
+      }
+      if (ValidInput(next, "1"))
+      {
+        CheckInventory(repo);
+      }
+      if (ValidInput(next, "2"))
+      {
+        Console.WriteLine("Have a nice day! Goodbye!");
         return;
       }
 
 
 
+    }
 
+    public void ShowOrderHistory(Customer c, DbRepo repo)
+    {
+      CustomerTasks ct = new CustomerTasks(repo);
+
+      string sortBy;
+      List<Order> orderHistory;
+      do
+      {
+        Console.WriteLine("Would you your order history sorted by [0] oldest or [1] newest?");
+        sortBy = Console.ReadLine();
+      } while (!ValidInput(sortBy, "0|1"));
+
+      if (ValidInput(sortBy, "0"))
+      { orderHistory = ct.GetOrderHistoryByDate(c, true); }
+      else { orderHistory = ct.GetOrderHistoryByDate(c, false); }
+
+      int i = 0;
+      foreach (Order ord in orderHistory)
+      {
+        i++;
+        Console.WriteLine($"Order {1} cost ${ord.Price} and contained the following:");
+        foreach (Product p in ord.Items)
+        {
+          Console.WriteLine($"     {p.Name}");
+        }
+      }
 
     }
+
+    public void CheckInventory(DbRepo repo)
+    {
+      LocationTasks lt = new LocationTasks(repo);
+
+      string address;
+      string proceed;
+      List<Product> inventory;
+      List<Location> locations = lt.GetAllLocations();
+      Location validAddress;
+      do
+      {
+        Console.WriteLine("Please enter a valid location address:");
+        address = Console.ReadLine();
+        validAddress = lt.GetLocationByAddress(address);
+        if (locations.Contains(validAddress)) { proceed = "0"; }
+        else
+        {
+          Console.WriteLine("Sorry, please enter either a valid location address or [1] to quit");
+          proceed = Console.ReadLine();
+        }
+      } while (!ValidInput(proceed, "0|1"));
+
+      if (ValidInput(proceed, "1"))
+      { return; }
+
+      inventory = validAddress.Inventory;
+      Console.WriteLine($"Our Location at {validAddress.Address} has the following inventory:");
+
+      foreach (Product p in inventory)
+      {
+        Console.WriteLine($"{p.Name} with {p.Stock} in stock");
+      }
+
+    }
+
 
     public Order MakeOrder()
     {
@@ -145,12 +263,18 @@ namespace StoreUI.Menus
         cusId = Console.ReadLine();
       }
       Customer cus = new Customer(cusName, Convert.ToInt32(cusId));
-      // if( cus in db && newCus = [0]){
-      //           get customer object/info from db
-      // }
-      // if (cus in db && newCus = [1]){
-      //  return customer with -2 id
-      // }
+
+      StoreContext context = new StoreContext();
+      DbRepo repo = new DbRepo(context);
+      Customer customerIdCheck = repo.GetCustomerById(Convert.ToInt32(cusId));
+      if (customerIdCheck != null && ValidInput(newCus, "1"))
+      {
+        return new Customer("", -2);
+      }
+      if (customerIdCheck != null && ValidInput(newCus, "0"))
+      {
+        return customerIdCheck;
+      }
 
       return cus;
 

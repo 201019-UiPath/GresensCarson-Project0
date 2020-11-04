@@ -8,8 +8,11 @@ namespace StoreDB.Models
     private int id;
     private double price;
     private string date;
+    private int customerId;
 
     public int Id { get; set; }
+    public int CustomerId { get; set; }
+
     public double Price { get; set; }
     public string Date { get; set; }
     public List<Product> Items { get; set; }

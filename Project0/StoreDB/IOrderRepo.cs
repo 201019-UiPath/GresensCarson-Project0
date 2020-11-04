@@ -11,6 +11,7 @@ namespace StoreDB
     void UpdateOrder(Order o);
     void RemoveOrder(Order o);
     Order GetOrderById(int id);
+    List<Order> GetOrdersByCustomerId(Customer cus);
     Order GetOrderByPrice(double price);
     List<Order> GetOrderByDate(bool asc);
     List<Order> GetAllOrders();
